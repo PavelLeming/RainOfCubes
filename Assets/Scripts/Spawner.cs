@@ -32,7 +32,7 @@ public class Spawner : MonoBehaviour
         cube.Rigidbody.velocity = Vector3.zero;
         cube.Rigidbody.angularVelocity = Vector3.zero;
         cube.gameObject.SetActive(true);
-        cube.ReadyForRelease += GetReleasde;
+        cube.ReadyForRelease += Release;
     }
 
     private void Start()
@@ -42,27 +42,24 @@ public class Spawner : MonoBehaviour
 
     private IEnumerator CountdownForNewCube()
     {
-        var wait = new WaitForSeconds(1);
+        var wait = new WaitForSeconds(_repeatTime);
 
-        while (true)
+        while (enabled)
         {
-            for (int i = _repeatTime; i > 0; i--)
-            {
-                yield return wait;
-            }
+            yield return wait;
 
-            GetCube();
+            SpawnCube();
         }
     }
 
-    private void GetCube()
+    private void SpawnCube()
     {
         _cubes.Get();
     }
 
-    private void GetReleasde(Cube cube)
+    private void Release(Cube cube)
     {
-        cube.ReadyForRelease -= GetReleasde;
+        cube.ReadyForRelease -= Release;
         _cubes.Release(cube);
     }
 }

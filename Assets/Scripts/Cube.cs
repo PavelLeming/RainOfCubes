@@ -1,10 +1,9 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Cube : MonoBehaviour
 {
-    private int _liveTime = 4;
+    [SerializeField] private ColorChanger _colorChanger;
     private bool _isUncolided = true;
     public Renderer Renderer { get; private set; }
     public Rigidbody Rigidbody {get; private set;}
@@ -20,9 +19,11 @@ public class Cube : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<Platform>() != null && _isUncolided)
+        Platform platform;
+
+        if (collision.gameObject.TryGetComponent<Platform>(out platform) && _isUncolided)
         {
-            Renderer.material.color = new Color(Random.value, Random.value, Random.value);
+            _colorChanger.ChancheColor();
             _isUncolided = false;
             StartCoroutine(CountdownForRealise());
         }
@@ -30,12 +31,9 @@ public class Cube : MonoBehaviour
 
     private IEnumerator CountdownForRealise()
     {
-        var wait = new WaitForSeconds(1);
+        var wait = new WaitForSeconds(Random.Range(2, 6));
 
-        for (int i = _liveTime; i > 0 ; i--)
-        {
-            yield return wait;
-        }
+        yield return wait;
 
         ReadyForRelease?.Invoke(gameObject.GetComponent<Cube>());
     }
