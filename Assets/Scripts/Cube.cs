@@ -1,20 +1,16 @@
 using System.Collections;
 using UnityEngine;
 
-public class Cube : MonoBehaviour
+public class Cube : PoolableObject
 {
     [SerializeField] private ColorChanger _colorChanger;
-    private bool _isUncolided = true;
-    public Renderer Renderer { get; private set; }
-    public Rigidbody Rigidbody {get; private set;}
 
+    private bool _isUncolided = true;
     public event System.Action<Cube> ReadyForRelease;
 
-    public void Initialize(bool isColided, Renderer renderer, Rigidbody rigidbody)
+    public void Initialize(bool isColided)
     {
         _isUncolided = isColided;
-        Renderer = renderer;
-        Rigidbody = rigidbody;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -35,6 +31,6 @@ public class Cube : MonoBehaviour
 
         yield return wait;
 
-        ReadyForRelease?.Invoke(gameObject.GetComponent<Cube>());
+        ReadyForRelease?.Invoke(this);
     }
 }
