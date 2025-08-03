@@ -7,6 +7,7 @@ public class BombSpawner : Spawner<Bomb>
     [SerializeField] private CubeSpawner _cubeSpawner;
 
     private Vector3 _position;
+    public event System.Action ObjectSpawned;
 
     private void OnEnable()
     {
@@ -24,8 +25,9 @@ public class BombSpawner : Spawner<Bomb>
         bomb.Renderer.material.color = Color.black;
         bomb.Rigidbody.velocity = Vector3.zero;
         bomb.Rigidbody.angularVelocity = Vector3.zero;
-        bomb.StartTimer();
         bomb.gameObject.SetActive(true);
+        bomb.StartTimer();
+        ObjectSpawned?.Invoke();
         bomb.ReadyForRelease += Release;
     }
     protected override void Release(Bomb bomb)

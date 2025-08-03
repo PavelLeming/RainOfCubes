@@ -10,6 +10,9 @@ public class Spawner<T> : MonoBehaviour where T : PoolableObject
 
     protected ObjectPool<T> _objects;
 
+    public int PoolCapacity => _objects.CountAll;
+    public int Actives => _objects.CountActive;
+
     private void Awake()
     {
         _objects = new ObjectPool<T>(
