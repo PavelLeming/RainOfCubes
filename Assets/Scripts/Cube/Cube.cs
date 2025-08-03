@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Cube : PoolableObject
 {
+    private const int MinTime = 2;
+    private const int MaxTime = 6;
+
     [SerializeField] private ColorChanger _colorChanger;
 
     private bool _isUncolided = true;
@@ -27,7 +30,7 @@ public class Cube : PoolableObject
 
     private IEnumerator CountdownForRealise()
     {
-        var wait = new WaitForSeconds(Random.Range(2, 6));
+        var wait = new WaitForSeconds(Random.Range(MinTime, MaxTime));
 
         yield return wait;
 

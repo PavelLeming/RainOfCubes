@@ -6,9 +6,6 @@ public class BombSpawner : Spawner<Bomb>
 {
     [SerializeField] private CubeSpawner _cubeSpawner;
 
-    private Vector3 _position;
-    public event System.Action ObjectSpawned;
-
     private void OnEnable()
     {
         _cubeSpawner.CubeDisabeled += SpawnObject;
@@ -21,13 +18,12 @@ public class BombSpawner : Spawner<Bomb>
 
     protected override void ActionOnGet(Bomb bomb)
     {
-        bomb.transform.position = _position;
         bomb.Renderer.material.color = Color.black;
         bomb.Rigidbody.velocity = Vector3.zero;
         bomb.Rigidbody.angularVelocity = Vector3.zero;
         bomb.gameObject.SetActive(true);
         bomb.StartTimer();
-        ObjectSpawned?.Invoke();
+        TellAboutSpawn();
         bomb.ReadyForRelease += Release;
     }
     protected override void Release(Bomb bomb)
@@ -38,7 +34,7 @@ public class BombSpawner : Spawner<Bomb>
 
     private void SpawnObject(Vector3 position)
     {
-        _position = position;
-        _objects.Get();
+        var bomb = _objects.Get();
+        bomb.gameObject.transform.position = position;
     }
 }

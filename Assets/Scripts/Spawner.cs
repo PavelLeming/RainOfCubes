@@ -5,8 +5,11 @@ using UnityEngine.Pool;
 public class Spawner<T> : MonoBehaviour where T : PoolableObject
 {
     [SerializeField] private T _object;
+
     private int _poolCapacity = 5;
     private int _poolMaxSize = 5;
+    public int SpawnedCount { get; private set; } = 0;
+    public event System.Action ObjectSpawned;
 
     protected ObjectPool<T> _objects;
 
@@ -34,5 +37,11 @@ public class Spawner<T> : MonoBehaviour where T : PoolableObject
     protected virtual void Release(T poolableObject)
     {
 
+    }
+
+    protected void TellAboutSpawn()
+    {
+        SpawnedCount++;
+        ObjectSpawned?.Invoke();
     }
 }

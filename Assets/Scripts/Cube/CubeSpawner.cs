@@ -6,7 +6,6 @@ public class CubeSpawner : Spawner<Cube>
 {
     private int _repeatTime = 2;
     public event System.Action<Vector3> CubeDisabeled;
-    public event System.Action ObjectSpawned;
 
     private void Start()
     {
@@ -38,7 +37,7 @@ public class CubeSpawner : Spawner<Cube>
         cube.Rigidbody.velocity = Vector3.zero;
         cube.Rigidbody.angularVelocity = Vector3.zero;
         cube.gameObject.SetActive(true);
-        ObjectSpawned?.Invoke();
+        TellAboutSpawn();
         cube.ReadyForRelease += Release;
     }
 
